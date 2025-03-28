@@ -1,0 +1,41 @@
+﻿@model SchoolMgtSystem_authenticationDemo.Models.validation.tblLoginModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Login</h2>
+<h3>@ViewBag.msg</h3>
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td>@Html.LabelFor(x => x.userid)</td>
+            <td>
+                @Html.TextBoxFor(x => x.userid)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(x => x.userid)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(x => Model.password)</td>
+            <td>
+                @Html.TextBoxFor(x => x.password)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(x => x.password)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">@Html.CheckBoxFor(x=>x.RememberMe) <span>Remember Me</span></td>
+            
+        </tr>
+        <tr>
+            <td colspan="3"><input type="submit" value="Login" /></td>
+        </tr>
+    </table>
+
+}
+
+
