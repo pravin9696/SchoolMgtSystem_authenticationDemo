@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace SchoolMgtSystem_authenticationDemo.Controllers
 {
+    [Authorize(Users = "DESKTOP-ABKHEEV\\XYZ")]
     public class StudentController : Controller
     {
         // GET: Student
