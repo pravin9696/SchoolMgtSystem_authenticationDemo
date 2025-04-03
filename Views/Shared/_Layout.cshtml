@@ -20,14 +20,14 @@
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    @if (User.Identity.IsAuthenticated)
-                    {
+                    @*@if (User.Identity.IsAuthenticated)
+                    {*@
                         <li>@Html.ActionLink("Logout", "logout", "Account", new { area = "" }, new { @class = "nav-link" })</li>
-                    }
+                    @*}
                     else
-                    {
+                    {*@
                         <li>@Html.ActionLink("Login", "Login", "Account", new { area = "" }, new { @class = "nav-link" })</li>
-                    }
+                    @*}*@
                 <li class="nav-link">@User.Identity.Name</li> 
                 </ul>
             </div>
