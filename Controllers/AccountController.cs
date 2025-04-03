@@ -9,6 +9,7 @@ using System.Web.Security;
 
 namespace SchoolMgtSystem_authenticationDemo.Controllers
 {
+   
     public class AccountController : Controller
     {
         StudDBEntities dbo = new StudDBEntities();
@@ -23,13 +24,13 @@ namespace SchoolMgtSystem_authenticationDemo.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("login");
         }
-        [AllowAnonymous]
+       
         public ActionResult Login()
         {
             tblLoginModel lmg = new tblLoginModel() { RememberMe = true };
             return View(lmg);
         }
-        [AllowAnonymous]
+       
         [HttpPost]
         public ActionResult Login(tblLoginModel lgm)
         {

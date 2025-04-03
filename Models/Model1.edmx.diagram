@@ -6,6 +6,18 @@
     <edmx:Diagrams>
       <Diagram DiagramId="e0f228e1c95d44bb8c9a62c76119231f" Name="Diagram1">
         <EntityTypeShape EntityType="StudDBModel.tblLogin" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StudDBModel.tblAttendance" Width="1.5" PointX="7.5" PointY="7.375" />
+        <EntityTypeShape EntityType="StudDBModel.tblCours" Width="1.5" PointX="3" PointY="4.625" />
+        <EntityTypeShape EntityType="StudDBModel.tblRegistration" Width="1.5" PointX="3" PointY="7.25" />
+        <EntityTypeShape EntityType="StudDBModel.tblRole" Width="1.5" PointX="0.75" PointY="4" />
+        <EntityTypeShape EntityType="StudDBModel.tblStudent" Width="1.5" PointX="5.25" PointY="7" />
+        <EntityTypeShape EntityType="StudDBModel.tblUserRole" Width="1.5" PointX="3" PointY="0.75" />
+        <AssociationConnector Association="StudDBModel.FK_tblAttendance_tblStudent" />
+        <AssociationConnector Association="StudDBModel.FK_tblStudent_tblCourses" />
+        <AssociationConnector Association="StudDBModel.FK_tblRegistration_tblLogin" />
+        <AssociationConnector Association="StudDBModel.FK_tblUserRoles_tblLogin" />
+        <AssociationConnector Association="StudDBModel.FK_tblStudent_tblRegistration" />
+        <AssociationConnector Association="StudDBModel.FK_tblUserRoles_tblRoles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

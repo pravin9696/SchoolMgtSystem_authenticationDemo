@@ -12,22 +12,22 @@ namespace SchoolMgtSystem_authenticationDemo.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tblLogin
+    public partial class tblRegistration
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public tblLogin()
+        public tblRegistration()
         {
-            this.tblRegistrations = new HashSet<tblRegistration>();
-            this.tblUserRoles = new HashSet<tblUserRole>();
+            this.tblStudents = new HashSet<tblStudent>();
         }
     
         public int Id { get; set; }
-        public string userid { get; set; }
-        public string password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public int loginid { get; set; }
     
+        public virtual tblLogin tblLogin { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblRegistration> tblRegistrations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblUserRole> tblUserRoles { get; set; }
+        public virtual ICollection<tblStudent> tblStudents { get; set; }
     }
 }

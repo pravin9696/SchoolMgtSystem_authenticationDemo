@@ -10,7 +10,7 @@ namespace SchoolMgtSystem_authenticationDemo.Controllers
     public class TeacherController : Controller
     {
         // GET: Teacher
-        [Authorize(Users = "DESKTOP-ABKHEEV\\ACER")]
+    
         public ActionResult Index()
         {
             return View();

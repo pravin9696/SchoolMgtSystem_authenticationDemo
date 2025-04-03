@@ -26,5 +26,11 @@ namespace SchoolMgtSystem_authenticationDemo.Models
         }
     
         public virtual DbSet<tblLogin> tblLogins { get; set; }
+        public virtual DbSet<tblAttendance> tblAttendances { get; set; }
+        public virtual DbSet<tblCours> tblCourses { get; set; }
+        public virtual DbSet<tblRegistration> tblRegistrations { get; set; }
+        public virtual DbSet<tblRole> tblRoles { get; set; }
+        public virtual DbSet<tblStudent> tblStudents { get; set; }
+        public virtual DbSet<tblUserRole> tblUserRoles { get; set; }
     }
 }

@@ -4,7 +4,23 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="StudDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="StudDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblAttendance">
+          <Key>
+            <PropertyRef Name="AttendanceID" />
+          </Key>
+          <Property Name="AttendanceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="studentID" Type="int" />
+          <Property Name="AttendanceDate" Type="datetime" />
+          <Property Name="isPresent" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblCourses">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="courseName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="tblLogin">
           <Key>
             <PropertyRef Name="Id" />
@@ -13,11 +29,150 @@
           <Property Name="userid" Type="nvarchar" MaxLength="50" />
           <Property Name="password" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="tblRegistration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="loginid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblRoles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Role" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblStudent">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="totalMarks" Type="int" />
+          <Property Name="div" Type="nchar" MaxLength="10" />
+          <Property Name="CouserId" Type="int" />
+          <Property Name="RegId" Type="int" />
+        </EntityType>
+        <EntityType Name="tblUserRoles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="loginId" Type="int" />
+          <Property Name="roleId" Type="int" />
+        </EntityType>
+        <Association Name="FK_tblAttendance_tblStudent">
+          <End Role="tblStudent" Type="Self.tblStudent" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblAttendance" Type="Self.tblAttendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStudent">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblAttendance">
+              <PropertyRef Name="studentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblRegistration_tblLogin">
+          <End Role="tblLogin" Type="Self.tblLogin" Multiplicity="1" />
+          <End Role="tblRegistration" Type="Self.tblRegistration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLogin">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblRegistration">
+              <PropertyRef Name="loginid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblStudent_tblCourses">
+          <End Role="tblCourses" Type="Self.tblCourses" Multiplicity="0..1" />
+          <End Role="tblStudent" Type="Self.tblStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCourses">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblStudent">
+              <PropertyRef Name="CouserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblStudent_tblRegistration">
+          <End Role="tblRegistration" Type="Self.tblRegistration" Multiplicity="0..1" />
+          <End Role="tblStudent" Type="Self.tblStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRegistration">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblStudent">
+              <PropertyRef Name="RegId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUserRoles_tblLogin">
+          <End Role="tblLogin" Type="Self.tblLogin" Multiplicity="0..1" />
+          <End Role="tblUserRoles" Type="Self.tblUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLogin">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblUserRoles">
+              <PropertyRef Name="loginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUserRoles_tblRoles">
+          <End Role="tblRoles" Type="Self.tblRoles" Multiplicity="0..1" />
+          <End Role="tblUserRoles" Type="Self.tblUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRoles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblUserRoles">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="StudDBModelStoreContainer">
+          <EntitySet Name="tblAttendance" EntityType="Self.tblAttendance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCourses" EntityType="Self.tblCourses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblLogin" EntityType="Self.tblLogin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblRegistration" EntityType="Self.tblRegistration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblRoles" EntityType="Self.tblRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblStudent" EntityType="Self.tblStudent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUserRoles" EntityType="Self.tblUserRoles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblAttendance_tblStudent" Association="Self.FK_tblAttendance_tblStudent">
+            <End Role="tblStudent" EntitySet="tblStudent" />
+            <End Role="tblAttendance" EntitySet="tblAttendance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblRegistration_tblLogin" Association="Self.FK_tblRegistration_tblLogin">
+            <End Role="tblLogin" EntitySet="tblLogin" />
+            <End Role="tblRegistration" EntitySet="tblRegistration" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblStudent_tblCourses" Association="Self.FK_tblStudent_tblCourses">
+            <End Role="tblCourses" EntitySet="tblCourses" />
+            <End Role="tblStudent" EntitySet="tblStudent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblStudent_tblRegistration" Association="Self.FK_tblStudent_tblRegistration">
+            <End Role="tblRegistration" EntitySet="tblRegistration" />
+            <End Role="tblStudent" EntitySet="tblStudent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUserRoles_tblLogin" Association="Self.FK_tblUserRoles_tblLogin">
+            <End Role="tblLogin" EntitySet="tblLogin" />
+            <End Role="tblUserRoles" EntitySet="tblUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUserRoles_tblRoles" Association="Self.FK_tblUserRoles_tblRoles">
+            <End Role="tblRoles" EntitySet="tblRoles" />
+            <End Role="tblUserRoles" EntitySet="tblUserRoles" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="StudDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -28,10 +183,178 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="userid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblRegistrations" Relationship="StudDBModel.FK_tblRegistration_tblLogin" FromRole="tblLogin" ToRole="tblRegistration" />
+          <NavigationProperty Name="tblUserRoles" Relationship="StudDBModel.FK_tblUserRoles_tblLogin" FromRole="tblLogin" ToRole="tblUserRole" />
         </EntityType>
         <EntityContainer Name="StudDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="tblLogins" EntityType="Self.tblLogin" />
+          <EntitySet Name="tblAttendances" EntityType="StudDBModel.tblAttendance" />
+          <EntitySet Name="tblCourses" EntityType="StudDBModel.tblCours" />
+          <EntitySet Name="tblRegistrations" EntityType="StudDBModel.tblRegistration" />
+          <EntitySet Name="tblRoles" EntityType="StudDBModel.tblRole" />
+          <EntitySet Name="tblStudents" EntityType="StudDBModel.tblStudent" />
+          <EntitySet Name="tblUserRoles" EntityType="StudDBModel.tblUserRole" />
+          <AssociationSet Name="FK_tblAttendance_tblStudent" Association="StudDBModel.FK_tblAttendance_tblStudent">
+            <End Role="tblStudent" EntitySet="tblStudents" />
+            <End Role="tblAttendance" EntitySet="tblAttendances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblStudent_tblCourses" Association="StudDBModel.FK_tblStudent_tblCourses">
+            <End Role="tblCours" EntitySet="tblCourses" />
+            <End Role="tblStudent" EntitySet="tblStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblRegistration_tblLogin" Association="StudDBModel.FK_tblRegistration_tblLogin">
+            <End Role="tblLogin" EntitySet="tblLogins" />
+            <End Role="tblRegistration" EntitySet="tblRegistrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUserRoles_tblLogin" Association="StudDBModel.FK_tblUserRoles_tblLogin">
+            <End Role="tblLogin" EntitySet="tblLogins" />
+            <End Role="tblUserRole" EntitySet="tblUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblStudent_tblRegistration" Association="StudDBModel.FK_tblStudent_tblRegistration">
+            <End Role="tblRegistration" EntitySet="tblRegistrations" />
+            <End Role="tblStudent" EntitySet="tblStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUserRoles_tblRoles" Association="StudDBModel.FK_tblUserRoles_tblRoles">
+            <End Role="tblRole" EntitySet="tblRoles" />
+            <End Role="tblUserRole" EntitySet="tblUserRoles" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="tblAttendance">
+          <Key>
+            <PropertyRef Name="AttendanceID" />
+          </Key>
+          <Property Name="AttendanceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="studentID" Type="Int32" />
+          <Property Name="AttendanceDate" Type="DateTime" Precision="3" />
+          <Property Name="isPresent" Type="Boolean" />
+          <NavigationProperty Name="tblStudent" Relationship="StudDBModel.FK_tblAttendance_tblStudent" FromRole="tblAttendance" ToRole="tblStudent" />
+        </EntityType>
+        <EntityType Name="tblCours">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="courseName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblStudents" Relationship="StudDBModel.FK_tblStudent_tblCourses" FromRole="tblCours" ToRole="tblStudent" />
+        </EntityType>
+        <EntityType Name="tblRegistration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="loginid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblLogin" Relationship="StudDBModel.FK_tblRegistration_tblLogin" FromRole="tblRegistration" ToRole="tblLogin" />
+          <NavigationProperty Name="tblStudents" Relationship="StudDBModel.FK_tblStudent_tblRegistration" FromRole="tblRegistration" ToRole="tblStudent" />
+        </EntityType>
+        <EntityType Name="tblRole">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblUserRoles" Relationship="StudDBModel.FK_tblUserRoles_tblRoles" FromRole="tblRole" ToRole="tblUserRole" />
+        </EntityType>
+        <EntityType Name="tblStudent">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="totalMarks" Type="Int32" />
+          <Property Name="div" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="CouserId" Type="Int32" />
+          <Property Name="RegId" Type="Int32" />
+          <NavigationProperty Name="tblAttendances" Relationship="StudDBModel.FK_tblAttendance_tblStudent" FromRole="tblStudent" ToRole="tblAttendance" />
+          <NavigationProperty Name="tblCours" Relationship="StudDBModel.FK_tblStudent_tblCourses" FromRole="tblStudent" ToRole="tblCours" />
+          <NavigationProperty Name="tblRegistration" Relationship="StudDBModel.FK_tblStudent_tblRegistration" FromRole="tblStudent" ToRole="tblRegistration" />
+        </EntityType>
+        <EntityType Name="tblUserRole">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="loginId" Type="Int32" />
+          <Property Name="roleId" Type="Int32" />
+          <NavigationProperty Name="tblLogin" Relationship="StudDBModel.FK_tblUserRoles_tblLogin" FromRole="tblUserRole" ToRole="tblLogin" />
+          <NavigationProperty Name="tblRole" Relationship="StudDBModel.FK_tblUserRoles_tblRoles" FromRole="tblUserRole" ToRole="tblRole" />
+        </EntityType>
+        <Association Name="FK_tblAttendance_tblStudent">
+          <End Type="StudDBModel.tblStudent" Role="tblStudent" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="StudDBModel.tblAttendance" Role="tblAttendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStudent">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblAttendance">
+              <PropertyRef Name="studentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblStudent_tblCourses">
+          <End Type="StudDBModel.tblCours" Role="tblCours" Multiplicity="0..1" />
+          <End Type="StudDBModel.tblStudent" Role="tblStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCours">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblStudent">
+              <PropertyRef Name="CouserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblRegistration_tblLogin">
+          <End Type="StudDBModel.tblLogin" Role="tblLogin" Multiplicity="1" />
+          <End Type="StudDBModel.tblRegistration" Role="tblRegistration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLogin">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblRegistration">
+              <PropertyRef Name="loginid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUserRoles_tblLogin">
+          <End Type="StudDBModel.tblLogin" Role="tblLogin" Multiplicity="0..1" />
+          <End Type="StudDBModel.tblUserRole" Role="tblUserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLogin">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblUserRole">
+              <PropertyRef Name="loginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblStudent_tblRegistration">
+          <End Type="StudDBModel.tblRegistration" Role="tblRegistration" Multiplicity="0..1" />
+          <End Type="StudDBModel.tblStudent" Role="tblStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRegistration">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblStudent">
+              <PropertyRef Name="RegId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUserRoles_tblRoles">
+          <End Type="StudDBModel.tblRole" Role="tblRole" Multiplicity="0..1" />
+          <End Type="StudDBModel.tblUserRole" Role="tblUserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRole">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblUserRole">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -44,6 +367,64 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="userid" ColumnName="userid" />
                 <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblAttendances">
+            <EntityTypeMapping TypeName="StudDBModel.tblAttendance">
+              <MappingFragment StoreEntitySet="tblAttendance">
+                <ScalarProperty Name="isPresent" ColumnName="isPresent" />
+                <ScalarProperty Name="AttendanceDate" ColumnName="AttendanceDate" />
+                <ScalarProperty Name="studentID" ColumnName="studentID" />
+                <ScalarProperty Name="AttendanceID" ColumnName="AttendanceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCourses">
+            <EntityTypeMapping TypeName="StudDBModel.tblCours">
+              <MappingFragment StoreEntitySet="tblCourses">
+                <ScalarProperty Name="courseName" ColumnName="courseName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblRegistrations">
+            <EntityTypeMapping TypeName="StudDBModel.tblRegistration">
+              <MappingFragment StoreEntitySet="tblRegistration">
+                <ScalarProperty Name="loginid" ColumnName="loginid" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblRoles">
+            <EntityTypeMapping TypeName="StudDBModel.tblRole">
+              <MappingFragment StoreEntitySet="tblRoles">
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStudents">
+            <EntityTypeMapping TypeName="StudDBModel.tblStudent">
+              <MappingFragment StoreEntitySet="tblStudent">
+                <ScalarProperty Name="RegId" ColumnName="RegId" />
+                <ScalarProperty Name="CouserId" ColumnName="CouserId" />
+                <ScalarProperty Name="div" ColumnName="div" />
+                <ScalarProperty Name="totalMarks" ColumnName="totalMarks" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUserRoles">
+            <EntityTypeMapping TypeName="StudDBModel.tblUserRole">
+              <MappingFragment StoreEntitySet="tblUserRoles">
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="loginId" ColumnName="loginId" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
